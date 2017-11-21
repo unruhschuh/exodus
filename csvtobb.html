@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<basefont face="sans-serif">
+</head>
+<body style="font-family:verdana;">
+<script>
+function replace() {
+  var from = document.getElementById("from").value;
+  fromHTML = from;
+  from = from.replace(new RegExp("^", "gm"), "[tr][td]");
+  from = from.replace(new RegExp("\t", "g"), "[/td][td]");
+  from = from.replace(new RegExp(";", "g"), "[/td][td]");
+  from = from.replace(new RegExp("$", "gm"), "[/td][/tr]");
+  from = from.replace(new RegExp("\\\\n", "g"), "\n");
+  from = "[table]\n" + from + "\n[/table]";
+
+  fromHTML = fromHTML.replace(new RegExp("\\[b\\]", "g"), "<b>");
+  fromHTML = fromHTML.replace(new RegExp("\\[/b\\]", "g"), "</b>");
+  fromHTML = fromHTML.replace(new RegExp("\\[u\\]", "g"), "<u>");
+  fromHTML = fromHTML.replace(new RegExp("\\[/u\\]", "g"), "</u>");
+  fromHTML = fromHTML.replace(new RegExp("\\[i\\]", "g"), "<i>");
+  fromHTML = fromHTML.replace(new RegExp("\\[/i\\]", "g"), "</i>");
+  fromHTML = fromHTML.replace(new RegExp("^", "gm"), "<tr style=\" border: 1px solid black\"><td style=\" border: 1px solid black\">");
+  fromHTML = fromHTML.replace(new RegExp("\t", "g"), "</td><td style=\" border: 1px solid black\">");
+  fromHTML = fromHTML.replace(new RegExp(";", "g"), "</td><td style=\" border: 1px solid black\">");
+  fromHTML = fromHTML.replace(new RegExp("$", "gm"), "</td></tr>");
+  fromHTML = fromHTML.replace(new RegExp("\\\\n", "g"), "<br>");
+  fromHTML = "<table style=\" border: 1px solid black; border-collapse: collapse\">\n" + fromHTML + "\n</table>";
+
+  document.getElementById("to").value = from;
+  document.getElementById("htmltable").innerHTML = fromHTML;
+}
+</script>
+<h1>Input</h1>
+<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
+<h1>Preview</h1>
+<div style="font-family:verdana;" id="htmltable"></div>
+<h1>BB-Code</h1>
+<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
+</body>
+</html>
