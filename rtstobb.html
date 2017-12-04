@@ -1,27 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-<basefont face="sans-serif">
-</head>
-<body style="font-family:verdana;">
-<script>
-function replace() {
-  var from = document.getElementById("from").value;
-  from = from.replace(new RegExp("^ ", "gm"), "\n[b]");
-  from = from.replace(new RegExp("Sets [0-9]*", "g"), "[/b]");
-  from = from.replace(new RegExp("Weight: ", "g"), "");
-  from = from.replace(new RegExp("kgs *Reps Completed:", "g"), "x");
-  from = from.replace(new RegExp("lbs *Reps Completed:", "g"), "x");
-  from = from.replace(new RegExp("Reps Intended:", "g"), "/");
-  from = from.replace(new RegExp("RPE:", "g"), "@");
-  
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>RTS to BB</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  document.getElementById("to").value = from;
-}
-</script>
-<h1>Input</h1>
-<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
-<h1>BB-Code</h1>
-<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
-</body>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <body>
+    <script>
+    function replace() {
+      var from = document.getElementById("from").value;
+      from = from.replace(new RegExp("^ ", "gm"), "\n[b]");
+      from = from.replace(new RegExp("Sets [0-9]*", "g"), "[/b]");
+      from = from.replace(new RegExp("Weight: ", "g"), "");
+      from = from.replace(new RegExp("kgs *Reps Completed:", "g"), "x");
+      from = from.replace(new RegExp("lbs *Reps Completed:", "g"), "x");
+      from = from.replace(new RegExp("Reps Intended:", "g"), "/");
+      from = from.replace(new RegExp("RPE:", "g"), "@");
+      
+
+      document.getElementById("to").value = from;
+    }
+    </script>
+
+    <div class="container">
+      <h1>RTS to BB</h1>
+      <div class="row">
+        <div class="col-sm">
+          <h2>Input</h2>
+          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
+        </div>
+        <div class="col-sm">
+          <h2>BB-Code</h2>
+          <textarea class="form-control" style="font-family:courier;" id="to" rows="20"></textarea>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </body>
 </html>
+
