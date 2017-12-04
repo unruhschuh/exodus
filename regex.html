@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<basefont face="sans-serif">
+</head>
+<body style="font-family:verdana;">
+<script>
+function replace() {
+  var regex = document.getElementById("regex").value.split('\n');
+  var from = document.getElementById("from").value;
+
+  for (var i = 0; i < regex.length; i++)
+  {
+    from = from.replace(new RegExp(regex[i], "gm"), "[tr][td]");
+  }
+
+  document.getElementById("to").value = from;
+  document.getElementById("htmltable").innerHTML = fromHTML;
+}
+</script>
+<h1>Input</h1>
+<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
+<h1>Preview</h1>
+<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
+<h1>BB-Code</h1>
+<textarea style="font-family:courier;" id="regex" rows="30" cols="70"></textarea>
+</body>
+</html>

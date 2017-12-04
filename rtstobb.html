@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<basefont face="sans-serif">
+</head>
+<body style="font-family:verdana;">
+<script>
+function replace() {
+  var from = document.getElementById("from").value;
+  from = from.replace(new RegExp("Weight: ", "g"), "");
+  from = from.replace(new RegExp("kgs Reps Completed:", "g"), "x");
+  from = from.replace(new RegExp("lbs Reps Completed:", "g"), "x");
+  from = from.replace(new RegExp("Reps Intended:", "g"), "/");
+  from = from.replace(new RegExp("RPE:", "g"), "@");
+  from = from.replace(new RegExp("^Sets [0-9]*\n", "gm"), "");
+  
+
+  fromHTML = from;
+  fromHTML = fromHTML.replace(new RegExp("$", "gm"), "<br>");
+
+  document.getElementById("to").value = from;
+  document.getElementById("htmltable").innerHTML = fromHTML;
+}
+</script>
+<h1>Input</h1>
+<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
+<h1>Preview</h1>
+<div style="font-family:verdana;" id="htmltable"></div>
+<h1>BB-Code</h1>
+<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
+</body>
+</html>
