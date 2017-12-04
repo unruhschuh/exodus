@@ -7,12 +7,13 @@
 <script>
 function replace() {
   var from = document.getElementById("from").value;
+  from = from.replace(new RegExp("^ ", "gm"), "\n[b]");
+  from = from.replace(new RegExp("Sets [0-9]", "g"), "[/b]");
   from = from.replace(new RegExp("Weight: ", "g"), "");
-  from = from.replace(new RegExp("kgs Reps Completed:", "g"), "x");
-  from = from.replace(new RegExp("lbs Reps Completed:", "g"), "x");
+  from = from.replace(new RegExp("kgs *Reps Completed:", "g"), "x");
+  from = from.replace(new RegExp("lbs *Reps Completed:", "g"), "x");
   from = from.replace(new RegExp("Reps Intended:", "g"), "/");
   from = from.replace(new RegExp("RPE:", "g"), "@");
-  from = from.replace(new RegExp("^Sets [0-9]*\n", "gm"), "");
   
 
   fromHTML = from;
