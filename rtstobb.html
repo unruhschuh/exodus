@@ -16,17 +16,11 @@ function replace() {
   from = from.replace(new RegExp("RPE:", "g"), "@");
   
 
-  fromHTML = from;
-  fromHTML = fromHTML.replace(new RegExp("$", "gm"), "<br>");
-
   document.getElementById("to").value = from;
-  document.getElementById("htmltable").innerHTML = fromHTML;
 }
 </script>
 <h1>Input</h1>
 <textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
-<h1>Preview</h1>
-<div style="font-family:verdana;" id="htmltable"></div>
 <h1>BB-Code</h1>
 <textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
 </body>
