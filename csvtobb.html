@@ -1,42 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-<basefont face="sans-serif">
-</head>
-<body style="font-family:verdana;">
-<script>
-function replace() {
-  var from = document.getElementById("from").value;
-  fromHTML = from;
-  from = from.replace(new RegExp("^", "gm"), "[tr][td]");
-  from = from.replace(new RegExp("\t", "g"), "[/td][td]");
-  from = from.replace(new RegExp(";", "g"), "[/td][td]");
-  from = from.replace(new RegExp("$", "gm"), "[/td][/tr]");
-  from = from.replace(new RegExp("\\\\n", "g"), "\n");
-  from = "[table]\n" + from + "\n[/table]";
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>CSV to BB</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  fromHTML = fromHTML.replace(new RegExp("\\[b\\]", "g"), "<b>");
-  fromHTML = fromHTML.replace(new RegExp("\\[/b\\]", "g"), "</b>");
-  fromHTML = fromHTML.replace(new RegExp("\\[u\\]", "g"), "<u>");
-  fromHTML = fromHTML.replace(new RegExp("\\[/u\\]", "g"), "</u>");
-  fromHTML = fromHTML.replace(new RegExp("\\[i\\]", "g"), "<i>");
-  fromHTML = fromHTML.replace(new RegExp("\\[/i\\]", "g"), "</i>");
-  fromHTML = fromHTML.replace(new RegExp("^", "gm"), "<tr style=\" border: 1px solid black\"><td style=\" border: 1px solid black\">");
-  fromHTML = fromHTML.replace(new RegExp("\t", "g"), "</td><td style=\" border: 1px solid black\">");
-  fromHTML = fromHTML.replace(new RegExp(";", "g"), "</td><td style=\" border: 1px solid black\">");
-  fromHTML = fromHTML.replace(new RegExp("$", "gm"), "</td></tr>");
-  fromHTML = fromHTML.replace(new RegExp("\\\\n", "g"), "<br>");
-  fromHTML = "<table style=\" border: 1px solid black; border-collapse: collapse\">\n" + fromHTML + "\n</table>";
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <body>
+    <script>
+    function replace() {
+      var from = document.getElementById("from").value;
+      fromHTML = from;
+      from = from.replace(new RegExp("^", "gm"), "[tr][td]");
+      from = from.replace(new RegExp("\t", "g"), "[/td][td]");
+      from = from.replace(new RegExp(";", "g"), "[/td][td]");
+      from = from.replace(new RegExp("$", "gm"), "[/td][/tr]");
+      from = from.replace(new RegExp("\\\\n", "g"), "\n");
+      from = "[table]\n" + from + "\n[/table]";
 
-  document.getElementById("to").value = from;
-  document.getElementById("htmltable").innerHTML = fromHTML;
-}
-</script>
-<h1>Input</h1>
-<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
-<h1>Preview</h1>
-<div style="font-family:verdana;" id="htmltable"></div>
-<h1>BB-Code</h1>
-<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
-</body>
+      fromHTML = fromHTML.replace(new RegExp("\\[b\\]", "g"), "<b>");
+      fromHTML = fromHTML.replace(new RegExp("\\[/b\\]", "g"), "</b>");
+      fromHTML = fromHTML.replace(new RegExp("\\[u\\]", "g"), "<u>");
+      fromHTML = fromHTML.replace(new RegExp("\\[/u\\]", "g"), "</u>");
+      fromHTML = fromHTML.replace(new RegExp("\\[i\\]", "g"), "<i>");
+      fromHTML = fromHTML.replace(new RegExp("\\[/i\\]", "g"), "</i>");
+      fromHTML = fromHTML.replace(new RegExp("^", "gm"), "<tr style=\" border: 1px solid black\"><td style=\" border: 1px solid black\">");
+      fromHTML = fromHTML.replace(new RegExp("\t", "g"), "</td><td style=\" border: 1px solid black\">");
+      fromHTML = fromHTML.replace(new RegExp(";", "g"), "</td><td style=\" border: 1px solid black\">");
+      fromHTML = fromHTML.replace(new RegExp("$", "gm"), "</td></tr>");
+      fromHTML = fromHTML.replace(new RegExp("\\\\n", "g"), "<br>");
+      fromHTML = "<table style=\" border: 1px solid black; border-collapse: collapse\">\n" + fromHTML + "\n</table>";
+
+      document.getElementById("to").value = from;
+      document.getElementById("htmltable").innerHTML = fromHTML;
+    }
+    </script>
+
+  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <a class="navbar-brand" href="#">Exodus Tools</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#">CSV to BB <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="rtstobb.html">RTS to BB</a>
+      </div>
+    </div>
+  </nav>
+
+    <div class="container">
+      <h1>CSV to BB</h1>
+      <div class="row">
+        <div class="col-sm">
+          <h2>Input</h2>
+          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
+        </div>
+        <div class="col-sm">
+          <h2>BB-Code</h2>
+          <textarea class="form-control" style="font-family:courier;" id="to" rows="20"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h1>Preview</h1>
+          <div style="font-family:verdana;" id="htmltable"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </body>
 </html>
+
