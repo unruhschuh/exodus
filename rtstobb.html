@@ -13,16 +13,36 @@
     <script>
     function replace() {
       var from = document.getElementById("from").value;
-      from = from.replace(new RegExp("^ ", "gm"), "\n[b]");
-      from = from.replace(new RegExp("Sets [0-9]*", "g"), "[/b]");
-      from = from.replace(new RegExp("Weight: ", "g"), "");
-      from = from.replace(new RegExp("kgs *Reps Completed:", "g"), "x");
-      from = from.replace(new RegExp("lbs *Reps Completed:", "g"), "x");
-      from = from.replace(new RegExp("Reps Intended:", "g"), "/");
-      from = from.replace(new RegExp("RPE:", "g"), "@");
-      
 
+      from = from.replace(/ *(.*) Sets \d\d*$/gm, "\n[b]$1[/b]");
+      from = from.replace(/^!Weight(.*)$/gm, "\n[b]$1[/b]");
+      from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
+        out = weight + " x " + reps;
+        if (ireps != "") {
+          out += " / " + ireps;
+        }
+        if (rpe != "") {
+          out += " @ " + rpe;
+        }
+        return out;
+      });
+      from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, reps, ireps, rpe) {
+        out = "x " + reps;
+        if (ireps != "") {
+          out += " / " + ireps;
+        }
+        if (rpe != "") {
+          out += " @ " + rpe;
+        }
+        return out;
+      });
+      
       document.getElementById("to").value = from;
+
+      fromHTML = from.replace(/\[b\]/g, "<b>");
+      fromHTML = fromHTML.replace(/\[\/b\]/g, "</b>");
+      fromHTML = fromHTML.replace(/\n/g, "<br>");
+      document.getElementById("preview").innerHTML = fromHTML;
     }
     </script>
 
@@ -51,6 +71,13 @@
         <div class="col-sm">
           <h2>BB-Code</h2>
           <textarea class="form-control" style="font-family:courier;" id="to" rows="20"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h1>Preview</h1>
+          <div id="preview"></div>
+        </div>
       </div>
     </div>
 
