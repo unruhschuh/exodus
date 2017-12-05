@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>RTS to BB</title>
+    <title>Exodus Tools</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,49 +10,26 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
   <body>
-    <script>
-    function replace() {
-      var from = document.getElementById("from").value;
-      from = from.replace(new RegExp("^ ", "gm"), "\n[b]");
-      from = from.replace(new RegExp("Sets [0-9]*", "g"), "[/b]");
-      from = from.replace(new RegExp("Weight: ", "g"), "");
-      from = from.replace(new RegExp("kgs *Reps Completed:", "g"), "x");
-      from = from.replace(new RegExp("lbs *Reps Completed:", "g"), "x");
-      from = from.replace(new RegExp("Reps Intended:", "g"), "/");
-      from = from.replace(new RegExp("RPE:", "g"), "@");
-      
-
-      document.getElementById("to").value = from;
-    }
-    </script>
-
 
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="index.html">Exodus Tools</a>
+    <a class="navbar-brand" href="#">Exodus Tools</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="index.html">Home</a>
+        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
         <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
-        <a class="nav-item nav-link active" href="#">RTS to BB <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="rtstobb.html">RTS to BB</a>
       </div>
     </div>
   </nav>
 
     <div class="container">
-      <h1>RTS to BB</h1>
-      <div class="row">
-        <div class="col-sm">
-          <h2>Input</h2>
-          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
-        </div>
-        <div class="col-sm">
-          <h2>BB-Code</h2>
-          <textarea class="form-control" style="font-family:courier;" id="to" rows="20"></textarea>
-      </div>
+      <h1>Exodus tools</h1>
+      These are some tools for creating posts on the <a href="http://exodus-strength.com/forum">Exodus-Strength Forum</a>.
     </div>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
