@@ -14,7 +14,7 @@
     function replace() {
       var from = document.getElementById("from").value;
 
-      from = from.replace(/ *(.*) Sets \d\d*$/gm, "\n[b]$1[/b]");
+      from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n[b]$1[/b]");
       from = from.replace(/^!Weight(.*)$/gm, "\n[b]$1[/b]");
       from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
         out = weight + " x " + reps;
