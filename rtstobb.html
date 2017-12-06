@@ -29,9 +29,24 @@
         exercise_post  = "[/i]" + exercise_post;
       }
 
+      notes_pre  = "";
+      notes_post = "";
+      if (document.getElementById("checkbox_underlined_notes").checked) {
+        notes_pre  += "[u]";
+        notes_post  = "[/u]" + notes_post;
+      }
+      if (document.getElementById("checkbox_bold_notes").checked) {
+        notes_pre  += "[b]";
+        notes_post  = "[/b]" + notes_post;
+      }
+      if (document.getElementById("checkbox_italic_notes").checked) {
+        notes_pre  += "[i]";
+        notes_post  = "[/i]" + notes_post;
+      }
+
 
       from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
-      from = from.replace(/^!Weight(.*)$/gm, "\n[b]$1[/b]");
+      from = from.replace(/^Notes: (.*)$/gm, notes_pre + "$1" + notes_post);
       from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
         out = weight + " x " + reps;
         if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
@@ -80,8 +95,10 @@
     <div class="container">
       <h1>RTS to BB</h1>
       <div class="row">
-        <div class="col">
-          <h2>Options</h2>
+        <h2>Options</h2>
+      </div>
+      <div class="row">
+        <div class="col-sm">
           <div class="checkbox">
             <label>
               <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise">
@@ -100,6 +117,30 @@
               Italic Exercise
             </label>
           </div>
+        </div>
+        <div class="col-sm">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_underlined_notes">
+              Underlined Notes
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_bold_notes">
+              Bold Notes
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_italic_notes" checked>
+              Italic Notes
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
           <div class="checkbox">
             <label>
               <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps">
