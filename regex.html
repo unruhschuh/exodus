@@ -1,28 +1,116 @@
-<!DOCTYPE html>
-<html>
-<head>
-<basefont face="sans-serif">
-</head>
-<body style="font-family:verdana;">
-<script>
-function replace() {
-  var regex = document.getElementById("regex").value.split('\n');
-  var from = document.getElementById("from").value;
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Regex</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  for (var i = 0; i < regex.length; i++)
-  {
-    from = from.replace(new RegExp(regex[i], "gm"), "[tr][td]");
-  }
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <body>
+    <script>
+    function replace() {
+      var input = document.getElementById("input").value;
 
-  document.getElementById("to").value = from;
-  document.getElementById("htmltable").innerHTML = fromHTML;
-}
-</script>
-<h1>Input</h1>
-<textarea style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="30" cols="70"></textarea>
-<h1>Preview</h1>
-<textarea style="font-family:courier;" id="to" rows="30" cols="70"></textarea>
-<h1>BB-Code</h1>
-<textarea style="font-family:courier;" id="regex" rows="30" cols="70"></textarea>
-</body>
+      var regex_1 = document.getElementById("regex_1").value;
+      var flags_1 = document.getElementById("flags_1").value;
+      var replace_1 = document.getElementById("replace_1").value;
+
+      var regex_2 = document.getElementById("regex_2").value;
+      var flags_2 = document.getElementById("flags_2").value;
+      var replace_2 = document.getElementById("replace_2").value;
+
+      input = input.replace(new RegExp(regex_1, flags_1), replace_1);
+      input = input.replace(new RegExp(regex_2, flags_2), replace_2);
+
+      document.getElementById("output").value = input;
+    }
+    </script>
+
+
+  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
+    <a class="navbar-brand" href="index.html">Exodus Tools</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="index.html">Home</a>
+        <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
+        <a class="nav-item nav-link" href="rtstobb.html">CSV to BB</a>
+        <a class="nav-item nav-link active" href="#">Regex<span class="sr-only">(current)</span></a>
+      </div>
+    </div>
+  </nav>
+
+    <div class="container">
+      <h1>Regex</h1>
+      <form>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="regex_1">Regular Expression</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="regex_1" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <div class="form-group">
+              <label for="flags_1">Flags</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="flags_1" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="replace_1">Replace</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="replace_1" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+        </div>
+      </form>
+      <form>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <label for="regex_2">Regular Expression</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="regex_2" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <div class="form-group">
+              <label for="flags_2">Flags</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="flags_2" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="replace_2">Replace</label>
+              <input type="text" style="font-family:courier;" class="form-control" id="replace_2" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()">
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-sm">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <h2>Input</h2>
+          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="input" rows="20"></textarea>
+        </div>
+        <div class="col-sm">
+          <h2>Output</h2>
+          <textarea class="form-control" style="font-family:courier;" id="output" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </body>
 </html>
+
