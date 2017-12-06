@@ -14,11 +14,27 @@
     function replace() {
       var from = document.getElementById("from").value;
 
-      from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n[b]$1[/b]");
+      exercise_pre  = "";
+      exercise_post = "";
+      if (document.getElementById("checkbox_underlined_exercise").checked) {
+        exercise_pre  += "[u]";
+        exercise_post  = "[/u]" + exercise_post;
+      }
+      if (document.getElementById("checkbox_bold_exercise").checked) {
+        exercise_pre  += "[b]";
+        exercise_post  = "[/b]" + exercise_post;
+      }
+      if (document.getElementById("checkbox_italic_exercise").checked) {
+        exercise_pre  += "[i]";
+        exercise_post  = "[/i]" + exercise_post;
+      }
+
+
+      from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
       from = from.replace(/^!Weight(.*)$/gm, "\n[b]$1[/b]");
       from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
         out = weight + " x " + reps;
-        if (ireps != "") {
+        if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
           out += " / " + ireps;
         }
         if (rpe != "") {
@@ -28,7 +44,7 @@
       });
       from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, reps, ireps, rpe) {
         out = "x " + reps;
-        if (ireps != "") {
+        if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
           out += " / " + ireps;
         }
         if (rpe != "") {
@@ -39,8 +55,8 @@
       
       document.getElementById("to").value = from;
 
-      fromHTML = from.replace(/\[b\]/g, "<b>");
-      fromHTML = fromHTML.replace(/\[\/b\]/g, "</b>");
+      fromHTML = from.replace(/\[(.)\]/g, "<$1>");
+      fromHTML = fromHTML.replace(/\[\/(.)\]/g, "</$1>");
       fromHTML = fromHTML.replace(/\n/g, "<br>");
       document.getElementById("preview").innerHTML = fromHTML;
     }
@@ -63,6 +79,35 @@
 
     <div class="container">
       <h1>RTS to BB</h1>
+      <div class="row">
+        <div class="col">
+          <h2>Options</h2>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise">
+              Underlined Exercise
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_bold_exercise" checked>
+              Bold Exercise
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_italic_exercise">
+              Italic Exercise
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps">
+              Ignore intended reps
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-sm">
           <h2>Input</h2>
