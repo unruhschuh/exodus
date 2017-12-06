@@ -67,6 +67,11 @@
         }
         return out;
       });
+
+      // remove empty line at the beginning
+      if (from.charAt(0) == "\n") {
+        from = from.substr(1);
+      }
       
       document.getElementById("to").value = from;
 
@@ -93,7 +98,9 @@
   </nav>
 
     <div class="container">
-      <h1>RTS to BB</h1>
+      <div class="row">
+        <h1>RTS to BB</h1>
+      </div>
       <div class="row">
         <h2>Options</h2>
       </div>
@@ -156,12 +163,12 @@
         </div>
         <div class="col-sm">
           <h2>BB-Code</h2>
-          <textarea class="form-control" style="font-family:courier;" id="to" rows="20"></textarea>
+          <textarea class="form-control" style="font-family:courier;" id="to" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h1>Preview</h1>
+<!--      </div>
+      <div class="row"> -->
+        <div class="col-sm">
+          <h2>Preview</h2>
           <div id="preview"></div>
         </div>
       </div>
