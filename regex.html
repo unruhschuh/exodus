@@ -76,7 +76,6 @@
         } 
         update_regex_input();
         replace();
-        write_cookies();
       }
 
       function update_regex_input() {
@@ -124,7 +123,6 @@
         draw_form();
 
         replace();
-        write_cookies();
       }
       function draw_form() {
         var num_regex = gl_regex.length;
@@ -186,6 +184,7 @@
           input = input.replace(new RegExp(gl_regex[i], gl_flags[i]), replace);
         }
         document.getElementById("output").value = input;
+        write_cookies();
       }
     </script>
 
