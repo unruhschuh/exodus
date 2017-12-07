@@ -9,77 +9,104 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
-  <body>
+  <body onload="load_me()">
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
-    function replace() {
-      var from = document.getElementById("from").value;
-
-      exercise_pre  = "";
-      exercise_post = "";
-      if (document.getElementById("checkbox_underlined_exercise").checked) {
-        exercise_pre  += "[u]";
-        exercise_post  = "[/u]" + exercise_post;
-      }
-      if (document.getElementById("checkbox_bold_exercise").checked) {
-        exercise_pre  += "[b]";
-        exercise_post  = "[/b]" + exercise_post;
-      }
-      if (document.getElementById("checkbox_italic_exercise").checked) {
-        exercise_pre  += "[i]";
-        exercise_post  = "[/i]" + exercise_post;
+      function load_me() {
+        read_cookies();
       }
 
-      notes_pre  = "";
-      notes_post = "";
-      if (document.getElementById("checkbox_underlined_notes").checked) {
-        notes_pre  += "[u]";
-        notes_post  = "[/u]" + notes_post;
-      }
-      if (document.getElementById("checkbox_bold_notes").checked) {
-        notes_pre  += "[b]";
-        notes_post  = "[/b]" + notes_post;
-      }
-      if (document.getElementById("checkbox_italic_notes").checked) {
-        notes_pre  += "[i]";
-        notes_post  = "[/i]" + notes_post;
+      function read_cookies() {
+        document.getElementById("checkbox_underlined_exercise").checked  = (Cookies.get("underlined_exercise")  == "true");
+        document.getElementById("checkbox_bold_exercise").checked        = (Cookies.get("bold_exercise")        == "true");
+        document.getElementById("checkbox_italic_exercise").checked      = (Cookies.get("italic_exercise")      == "true");
+        document.getElementById("checkbox_underlined_notes").checked     = (Cookies.get("underlined_notes")     == "true");
+        document.getElementById("checkbox_bold_notes").checked           = (Cookies.get("bold_notes")           == "true");
+        document.getElementById("checkbox_italic_notes").checked         = (Cookies.get("italic_notes")         == "true");
+        document.getElementById("checkbox_ignore_intended_reps").checked = (Cookies.get("ignore_intended_reps") == "true");
       }
 
+      function write_cookies() {
+        Cookies.set("underlined_exercise" , document.getElementById("checkbox_underlined_exercise").checked , { expires: 100 });
+        Cookies.set("bold_exercise"       , document.getElementById("checkbox_bold_exercise").checked       , { expires: 100 });
+        Cookies.set("italic_exercise"     , document.getElementById("checkbox_italic_exercise").checked     , { expires: 100 });
+        Cookies.set("underlined_notes"    , document.getElementById("checkbox_underlined_notes").checked    , { expires: 100 });
+        Cookies.set("bold_notes"          , document.getElementById("checkbox_bold_notes").checked          , { expires: 100 });
+        Cookies.set("italic_notes"        , document.getElementById("checkbox_italic_notes").checked        , { expires: 100 });
+        Cookies.set("ignore_intended_reps", document.getElementById("checkbox_ignore_intended_reps").checked, { expires: 100 });
+      }
 
-      from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
-      from = from.replace(/^Notes: *(.*)$/gm, notes_pre + "$1" + notes_post);
-      from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
-        out = weight + " x " + reps;
-        if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
-          out += " / " + ireps;
+      function replace() {
+        var from = document.getElementById("from").value;
+
+        exercise_pre  = "";
+        exercise_post = "";
+        if (document.getElementById("checkbox_underlined_exercise").checked) {
+          exercise_pre  += "[u]";
+          exercise_post  = "[/u]" + exercise_post;
         }
-        if (rpe != "") {
-          out += " @ " + rpe;
+        if (document.getElementById("checkbox_bold_exercise").checked) {
+          exercise_pre  += "[b]";
+          exercise_post  = "[/b]" + exercise_post;
         }
-        return out;
-      });
-      from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, reps, ireps, rpe) {
-        out = "x " + reps;
-        if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
-          out += " / " + ireps;
+        if (document.getElementById("checkbox_italic_exercise").checked) {
+          exercise_pre  += "[i]";
+          exercise_post  = "[/i]" + exercise_post;
         }
-        if (rpe != "") {
-          out += " @ " + rpe;
-        }
-        return out;
-      });
 
-      // remove empty line at the beginning
-      if (from.charAt(0) == "\n") {
-        from = from.substr(1);
+        notes_pre  = "";
+        notes_post = "";
+        if (document.getElementById("checkbox_underlined_notes").checked) {
+          notes_pre  += "[u]";
+          notes_post  = "[/u]" + notes_post;
+        }
+        if (document.getElementById("checkbox_bold_notes").checked) {
+          notes_pre  += "[b]";
+          notes_post  = "[/b]" + notes_post;
+        }
+        if (document.getElementById("checkbox_italic_notes").checked) {
+          notes_pre  += "[i]";
+          notes_post  = "[/i]" + notes_post;
+        }
+
+
+        from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
+        from = from.replace(/^Notes: *(.*)$/gm, notes_pre + "$1" + notes_post);
+        from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
+          out = weight + " x " + reps;
+          if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
+            out += " / " + ireps;
+          }
+          if (rpe != "") {
+            out += " @ " + rpe;
+          }
+          return out;
+        });
+        from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, reps, ireps, rpe) {
+          out = "x " + reps;
+          if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
+            out += " / " + ireps;
+          }
+          if (rpe != "") {
+            out += " @ " + rpe;
+          }
+          return out;
+        });
+
+        // remove empty line at the beginning
+        if (from.charAt(0) == "\n") {
+          from = from.substr(1);
+        }
+        
+        document.getElementById("to").value = from;
+
+        fromHTML = from.replace(/\[(.)\]/g, "<$1>");
+        fromHTML = fromHTML.replace(/\[\/(.)\]/g, "</$1>");
+        fromHTML = fromHTML.replace(/\n/g, "<br>");
+        document.getElementById("preview").innerHTML = fromHTML;
+
+        write_cookies();
       }
-      
-      document.getElementById("to").value = from;
-
-      fromHTML = from.replace(/\[(.)\]/g, "<$1>");
-      fromHTML = fromHTML.replace(/\[\/(.)\]/g, "</$1>");
-      fromHTML = fromHTML.replace(/\n/g, "<br>");
-      document.getElementById("preview").innerHTML = fromHTML;
-    }
     </script>
 
 
