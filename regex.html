@@ -33,17 +33,17 @@
       }
 
       function read_cookies() {
-        console.log("read_cookies()");
         var regex_input = Cookies.get("regex_input");
-        console.log(regex_input);
+        var input = Cookies.get("input");
         document.getElementById("regex_input").value = regex_input;
+        document.getElementById("input").value = input;
       }
 
       function write_cookies() {
-        console.log("write_cookies()");
         var regex_input = document.getElementById("regex_input").value;
-        console.log(regex_input);
+        var input = document.getElementById("input").value;
         Cookies.set("regex_input", regex_input, { expires: 365 });
+        Cookies.set("input", input, { expires: 365 });
       }
 
       function remove(index) {
