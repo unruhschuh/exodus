@@ -72,7 +72,7 @@
 
         from = from.replace(/ *(.*) Sets \d\d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
         from = from.replace(/^Notes: *(.*)$/gm, notes_pre + "$1" + notes_post);
-        from = from.replace(/Weight: *(\d*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, weight, reps, ireps, rpe) {
+        from = from.replace(/Weight: *([\d\.]*) *... *Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *([\d\.]*)/gm, function (match, weight, reps, ireps, rpe) {
           out = weight + " x " + reps;
           if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
             out += " / " + ireps;
@@ -82,7 +82,7 @@
           }
           return out;
         });
-        from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *(\d*)/gm, function (match, reps, ireps, rpe) {
+        from = from.replace(/Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *([\d\.]*)/gm, function (match, reps, ireps, rpe) {
           out = "x " + reps;
           if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
             out += " / " + ireps;
