@@ -110,19 +110,19 @@
     </script>
 
 
-  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
-    <a class="navbar-brand" href="index.html">Exodus Tools</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="index.html">Home</a>
-        <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
-        <a class="nav-item nav-link active" href="#">RTS to BB <span class="sr-only">(current)</span></a>
+    <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
+      <a class="navbar-brand" href="index.html">Exodus Tools</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="index.html">Home</a>
+          <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
+          <a class="nav-item nav-link active" href="#">RTS to BB <span class="sr-only">(current)</span></a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
     <div class="container-fluid">
       <div class="row">
@@ -130,78 +130,117 @@
           <h1>RTS to BB</h1>
         </div>
       </div>
-     <h2>Options</h2>
-      <div class="card card-body">
-        <div class="row">
-          <div class="col-sm">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise">
-                Underlined Exercise
-              </label>
+      <p>
+        <div class="card-group">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">
+                <a data-toggle="collapse" href="#help" aria-expanded="false" aria-controls="help">
+                   Help
+               </a>
+              </h4>
             </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_bold_exercise" checked>
-                Bold Exercise
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_italic_exercise">
-                Italic Exercise
-              </label>
-            </div>
-          </div>
-          <div class="col-sm">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_underlined_notes">
-                Underlined Notes
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_bold_notes">
-                Bold Notes
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_italic_notes" checked>
-                Italic Notes
-              </label>
+            <div class="collapse" id="help">
+              <div class="card-body">
+                <ul>
+                  <li>Go to your calendar</li>
+                  <li>Click on a workout</li>
+                  <li>Unfold all sets</li>
+                  <li>Copy all of it as shown in the picture below</li>
+                  <img width="400px" src="figures/rtscopy.png">
+                  <li>Paste it into the input</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
+      </p>
+      <p>
+        <div class="card-group">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">
+                <a data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="options">
+                   Options
+               </a>
+              </h4>
+            </div>
+            <div class="collapse" id="options">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise">
+                        Underlined Exercise
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_bold_exercise" checked>
+                        Bold Exercise
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_italic_exercise">
+                        Italic Exercise
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_underlined_notes">
+                        Underlined Notes
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_bold_notes">
+                        Bold Notes
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_italic_notes" checked>
+                        Italic Notes
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps">
+                        Ignore intended reps
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p>
+      <p>
         <div class="row">
           <div class="col-sm">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps">
-                Ignore intended reps
-              </label>
-            </div>
+            <h2>Input</h2>
+            <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
+          </div>
+          <div class="col-sm">
+            <h2>BB-Code</h2>
+            <textarea class="form-control" style="font-family:courier;" id="to" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
+          </div>
+          <div class="col-sm">
+            <h2>Preview</h2>
+            <div id="preview" style="border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm">
-          <h2>Input</h2>
-          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
-        </div>
-        <div class="col-sm">
-          <h2>BB-Code</h2>
-          <textarea class="form-control" style="font-family:courier;" id="to" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
-        </div>
-<!--      </div>
-      <div class="row"> -->
-        <div class="col-sm">
-          <h2>Preview</h2>
-          <div id="preview" style="border: 1px solid lightgray; border-radius:4px; padding: 10px;></div>
-        </div>
-      </div>
-    </div>
+    </p>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
