@@ -12,7 +12,7 @@
       #regex_input {
         background-attachment: local;
         background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%);
-        background-size: 100% 12rem;
+        background-size: 100% 4rem;
         width: 100%;
         line-height: 2rem;
         margin: 0 auto;
@@ -23,20 +23,21 @@
   <body onload="load_me()">
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
-      gl_regex   = [""];
-      gl_flags   = [""];
-      gl_replace = [""];
 
       function load_me() {
         read_cookies();
-        regex_input_changed();
+        replace();
       }
 
       function read_cookies() {
         var regex_input = Cookies.get("regex_input");
         var input = Cookies.get("input");
-        document.getElementById("regex_input").value = regex_input;
-        document.getElementById("input").value = input;
+        if (typeof regex_input != 'undefined') {
+          document.getElementById("regex_input").value = regex_input;
+        }
+        if (typeof input != 'undefined') {
+          document.getElementById("input").value = input;
+        }
       }
 
       function write_cookies() {
@@ -46,142 +47,46 @@
         Cookies.set("input", input, { expires: 365 });
       }
 
-      function remove(index) {
-        var num_regex = gl_regex.length;
-        if (num_regex > 1) {
-          gl_regex.splice(index,1);
-          gl_flags.splice(index,1);
-          gl_replace.splice(index,1);
-
-          update_regex_input();
-          draw_form();
-        }
-      }
-
-      function add_regex() {
-        gl_regex.push("");
-        gl_flags.push("");
-        gl_replace.push("");
-        draw_form();
-        update_regex_input();
-      }
-      function form_changed() {
-        console.log("form_changed()");
-        var num_regex = gl_regex.length;
-        
-        for (var i = 0; i < num_regex; i++) {
-          gl_regex[i]   = document.getElementById("regex_" + i).value;
-          gl_flags[i]   = document.getElementById("flags_" + i).value;
-          gl_replace[i] = document.getElementById("replace_" + i).value;
-        } 
-        update_regex_input();
-        replace();
-      }
-
-      function update_regex_input() {
-        var num_regex = gl_regex.length;
-
-        var regex_input = "";
-        for (var i = 0; i < num_regex; i++) {
-          regex_input += gl_regex[i] + "\n";
-          regex_input += gl_flags[i] + "\n";
-          regex_input += gl_replace[i];
-          if (i < num_regex-1) {
-            regex_input += "\n";
-          }
-        }
-        document.getElementById("regex_input").value = regex_input;
-      }
-
-      function regex_input_changed() {
-        console.log("regex_input_changed()");
+      function replace() {
+        console.log("replace()");
         var regex_input = document.getElementById("regex_input").value;
 
-        while (regex_input.split(/\r\n|\r|\n/).length % 3 != 0) {
-          regex_input += "\n";
-        }
-
         regex_input = regex_input.split(/\r\n|\r|\n/);
-        var num_lines   = regex_input.length;
-        var num_regex   = Math.floor(num_lines / 3.0);
-        console.log(num_regex);
+        var num_regex = regex_input.length;
 
-        gl_regex = [];
-        gl_flags = [];
-        gl_replace = [];
-
-        for (var i = 0; i < num_lines; i=i+3) {
-            gl_regex.push(regex_input[i]);
-        }
-        for (var i = 1; i < num_lines; i=i+3) {
-            gl_flags.push(regex_input[i]);
-        }
-        for (var i = 2; i < num_lines; i=i+3) {
-            gl_replace.push(regex_input[i]);
-        }
-
-        draw_form();
-
-        replace();
-      }
-      function draw_form() {
-        var num_regex = gl_regex.length;
-
-        var regex_form = '';
-        for (var i = 0; i < num_regex; i++) {
-          tmp = `
-            <form>
-              <div class="form-row">
-                <div class="col">
-                  <div class="form-group">
-                    <input type="text" style="font-family:courier; background-color:#DDDDDD;" class="form-control" id="regex_NUM" placeholder="Regular Expression" onpaste="form_changed()" oninput="form_changed()" onkeydown="form_changed()">
-                  </div>
-                </div>
-                <div class="col-sm-2">
-                  <div class="form-group">
-                    <input type="text" style="font-family:courier; background-color:#EEEEEE;" class="form-control" id="flags_NUM" placeholder="Flags" onpaste="form_changed()" oninput="form_changed()" onchange="form_changed()" onkeydown="form_changed()">
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <input type="text" style="font-family:courier;" class="form-control" id="replace_NUM" placeholder="Replace" onpaste="form_changed()" oninput="form_changed()" onchange="form_changed()" onkeydown="form_changed()">
-                  </div>
-                </div>
-                <div class="col-sm-2">
-                  <div class="form-group">
-                    <button type="button" class="btn btn-danger"    id="delete_NUM"    onclick="remove(NUM)"   >X</button>
-                    <button type="button" class="btn btn-secondary" id="move_up_NUM"   onclick="move_up(NUM)"  >▲</button>
-                    <button type="button" class="btn btn-secondary" id_"move_down_NUM" onclick="move_down(NUM)">▼</button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          `.replace(/NUM/g, i);
-          regex_form += tmp;
-        }
-        document.getElementById("regex_form").innerHTML = regex_form;
-
-
+        var regexps = [];
+        var flags = [];
+        var replace_strings = [];
 
         for (var i = 0; i < num_regex; i++) {
-          document.getElementById("regex_" + i).value   = gl_regex[i];
-          document.getElementById("flags_" + i).value   = gl_flags[i];
-          document.getElementById("replace_" + i).value = gl_replace[i];
+          regex_input[i] = regex_input[i].replace(/^\s+/g, "");
+          if (regex_input[i][0] == "/") {
+            var slash1 = regex_input[i].indexOf("/", 1);
+            while (regex_input[i][slash1-1] == "\\") {
+              slash1 = regex_input[i].indexOf("/", slash1+1);
+            }
+            var slash2 = regex_input[i].indexOf("/", slash1+1);
+            if (slash1 != -1 && slash2 != -1) {
+              regexps.push(regex_input[i].substring(1, slash1));
+              flags.push(regex_input[i].substring(slash1+1, slash2));
+              replace_strings.push(regex_input[i].substring(slash2+1));
+            }
+          }
         }
-//        document.getElementById("regex_input").value = regex_input;
-      }
-      function replace() {
-        var num_regex = gl_regex.length;
+        console.log(regexps);
+        console.log(flags);
+        console.log(replace_strings);
+
+        var num_regex = regexps.length;
 
         var input = document.getElementById("input").value;
 
         for (var i = 0; i < num_regex; i++) {
-          var replace = gl_replace[i];
-          replace = replace.replace(/\\n/g, "\n");
-          replace = replace.replace(/\\t/g, "\t");
-          replace = replace.replace(/\\r/g, "\r");
+          replace_strings[i] = replace_strings[i].replace(/\\n/g, "\n");
+          replace_strings[i] = replace_strings[i].replace(/\\t/g, "\t");
+          replace_strings[i] = replace_strings[i].replace(/\\r/g, "\r");
 
-          input = input.replace(new RegExp(gl_regex[i], gl_flags[i]), replace);
+          input = input.replace(new RegExp(regexps[i], flags[i]), replace_strings[i]);
         }
         document.getElementById("output").value = input;
         write_cookies();
@@ -198,7 +103,7 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="index.html">Home</a>
         <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
-        <a class="nav-item nav-link" href="rtstobb.html">CSV to BB</a>
+        <a class="nav-item nav-link" href="rtstobb.html">RTS to BB</a>
         <a class="nav-item nav-link active" href="#">MuReRe<span class="sr-only">(current)</span></a>
       </div>
     </div>
@@ -206,16 +111,10 @@
 
     <div class="container-fluid">
       <h1>Multi-Regex-Replace</h1>
-      <div id="regex_form"></div>
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-primary" onclick="add_regex()">+</button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h2>Regular Expression / Flag / Replace</h2>
-          <textarea wrap="off" class="form-control" style="font-family:courier;" onpaste="regex_input_changed()" oninput="regex_input_changed()" onchange="regex_input_changed()" id="regex_input" rows="9"></textarea>
+          <h2>Regular Expression / Flags / Replacement String</h2>
+          <textarea wrap="off" class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="regex_input" rows="9"></textarea>
         </div>
       </div>
       <div class="row">
