@@ -81,13 +81,21 @@
 
         var input = document.getElementById("input").value;
 
+        var log_text = "";
         for (var i = 0; i < num_regex; i++) {
           replace_strings[i] = replace_strings[i].replace(/\\n/g, "\n");
           replace_strings[i] = replace_strings[i].replace(/\\t/g, "\t");
           replace_strings[i] = replace_strings[i].replace(/\\r/g, "\r");
 
-          input = input.replace(new RegExp(regexps[i], flags[i]), replace_strings[i]);
+          try {
+            var regex = new RegExp(regexps[i], flags[i]);
+            input = input.replace(regex, replace_strings[i]);
+          }
+          catch (err) {
+            log_text += "Error in line " + (i+1) + ": " + err.message + "<br>";
+          }
         }
+        document.getElementById("log").innerHTML = log_text;
         document.getElementById("output").value = input;
         write_cookies();
       }
@@ -115,6 +123,12 @@
         <div class="col">
           <h2>Regular Expression / Flags / Replacement String</h2>
           <textarea wrap="off" class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="regex_input" rows="9"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h2>Log</h2>
+          <div id="log" style="color:red; border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
         </div>
       </div>
       <div class="row">
