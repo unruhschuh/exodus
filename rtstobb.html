@@ -1,243 +1,228 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>RTS to BB</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-  </head>
-  <body onload="load_me()">
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script>
-      function load_me() {
-        read_cookies();
+<head>
+  <title>RTS to BB</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+
+<body onload="load_me()">
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script>
+    function load_me() {
+      read_cookies();
+    }
+
+    function read_cookies() {
+      document.getElementById("checkbox_underlined_exercise").checked = (Cookies.get("underlined_exercise") == "true");
+      document.getElementById("checkbox_bold_exercise").checked = (Cookies.get("bold_exercise") == "true");
+      document.getElementById("checkbox_italic_exercise").checked = (Cookies.get("italic_exercise") == "true");
+      document.getElementById("checkbox_underlined_notes").checked = (Cookies.get("underlined_notes") == "true");
+      document.getElementById("checkbox_bold_notes").checked = (Cookies.get("bold_notes") == "true");
+      document.getElementById("checkbox_italic_notes").checked = (Cookies.get("italic_notes") == "true");
+      document.getElementById("checkbox_ignore_intended_reps").checked = (Cookies.get("ignore_intended_reps") == "true");
+    }
+
+    function write_cookies() {
+      Cookies.set("underlined_exercise", document.getElementById("checkbox_underlined_exercise").checked, {
+        expires: 100
+      });
+      Cookies.set("bold_exercise", document.getElementById("checkbox_bold_exercise").checked, {
+        expires: 100
+      });
+      Cookies.set("italic_exercise", document.getElementById("checkbox_italic_exercise").checked, {
+        expires: 100
+      });
+      Cookies.set("underlined_notes", document.getElementById("checkbox_underlined_notes").checked, {
+        expires: 100
+      });
+      Cookies.set("bold_notes", document.getElementById("checkbox_bold_notes").checked, {
+        expires: 100
+      });
+      Cookies.set("italic_notes", document.getElementById("checkbox_italic_notes").checked, {
+        expires: 100
+      });
+      Cookies.set("ignore_intended_reps", document.getElementById("checkbox_ignore_intended_reps").checked, {
+        expires: 100
+      });
+    }
+
+    function replace() {
+      var from = document.getElementById("from").value;
+
+      exercise_pre = "";
+      exercise_post = "";
+      if (document.getElementById("checkbox_underlined_exercise").checked) {
+        exercise_pre += "[u]";
+        exercise_post = "[/u]" + exercise_post;
+      }
+      if (document.getElementById("checkbox_bold_exercise").checked) {
+        exercise_pre += "[b]";
+        exercise_post = "[/b]" + exercise_post;
+      }
+      if (document.getElementById("checkbox_italic_exercise").checked) {
+        exercise_pre += "[i]";
+        exercise_post = "[/i]" + exercise_post;
       }
 
-      function read_cookies() {
-        document.getElementById("checkbox_underlined_exercise").checked  = (Cookies.get("underlined_exercise")  == "true");
-        document.getElementById("checkbox_bold_exercise").checked        = (Cookies.get("bold_exercise")        == "true");
-        document.getElementById("checkbox_italic_exercise").checked      = (Cookies.get("italic_exercise")      == "true");
-        document.getElementById("checkbox_underlined_notes").checked     = (Cookies.get("underlined_notes")     == "true");
-        document.getElementById("checkbox_bold_notes").checked           = (Cookies.get("bold_notes")           == "true");
-        document.getElementById("checkbox_italic_notes").checked         = (Cookies.get("italic_notes")         == "true");
-        document.getElementById("checkbox_ignore_intended_reps").checked = (Cookies.get("ignore_intended_reps") == "true");
+      notes_pre = "";
+      notes_post = "";
+      if (document.getElementById("checkbox_underlined_notes").checked) {
+        notes_pre += "[u]";
+        notes_post = "[/u]" + notes_post;
+      }
+      if (document.getElementById("checkbox_bold_notes").checked) {
+        notes_pre += "[b]";
+        notes_post = "[/b]" + notes_post;
+      }
+      if (document.getElementById("checkbox_italic_notes").checked) {
+        notes_pre += "[i]";
+        notes_post = "[/i]" + notes_post;
       }
 
-      function write_cookies() {
-        Cookies.set("underlined_exercise" , document.getElementById("checkbox_underlined_exercise").checked , { expires: 100 });
-        Cookies.set("bold_exercise"       , document.getElementById("checkbox_bold_exercise").checked       , { expires: 100 });
-        Cookies.set("italic_exercise"     , document.getElementById("checkbox_italic_exercise").checked     , { expires: 100 });
-        Cookies.set("underlined_notes"    , document.getElementById("checkbox_underlined_notes").checked    , { expires: 100 });
-        Cookies.set("bold_notes"          , document.getElementById("checkbox_bold_notes").checked          , { expires: 100 });
-        Cookies.set("italic_notes"        , document.getElementById("checkbox_italic_notes").checked        , { expires: 100 });
-        Cookies.set("ignore_intended_reps", document.getElementById("checkbox_ignore_intended_reps").checked, { expires: 100 });
+
+      from = from.replace(/ *(.*) Sets \d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
+      from = from.replace(/^Notes: *(.*)$/gm, notes_pre + "$1" + notes_post);
+      from = from.replace(/(?:Weight: *([\d\.]*) *... *)?Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *([\d\.]*) *$/gm, function(match, weight, reps, ireps, rpe) {
+        var out = "";
+        if (weight) {
+          out = weight + " ";
+        }
+        out += "x " + reps;
+        if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
+          out += " / " + ireps;
+        }
+        if (rpe != "") {
+          out += " @ " + rpe;
+        }
+        return out;
+      });
+
+      // remove empty line at the beginning
+      if (from.charAt(0) == "\n") {
+        from = from.substr(1);
       }
 
-      function replace() {
-        var from = document.getElementById("from").value;
+      document.getElementById("to").value = from;
 
-        exercise_pre  = "";
-        exercise_post = "";
-        if (document.getElementById("checkbox_underlined_exercise").checked) {
-          exercise_pre  += "[u]";
-          exercise_post  = "[/u]" + exercise_post;
-        }
-        if (document.getElementById("checkbox_bold_exercise").checked) {
-          exercise_pre  += "[b]";
-          exercise_post  = "[/b]" + exercise_post;
-        }
-        if (document.getElementById("checkbox_italic_exercise").checked) {
-          exercise_pre  += "[i]";
-          exercise_post  = "[/i]" + exercise_post;
-        }
+      fromHTML = from.replace(/\[(.)\]/g, "<$1>");
+      fromHTML = fromHTML.replace(/\[\/(.)\]/g, "</$1>");
+      fromHTML = fromHTML.replace(/\n/g, "<br>");
+      document.getElementById("preview").innerHTML = fromHTML;
 
-        notes_pre  = "";
-        notes_post = "";
-        if (document.getElementById("checkbox_underlined_notes").checked) {
-          notes_pre  += "[u]";
-          notes_post  = "[/u]" + notes_post;
-        }
-        if (document.getElementById("checkbox_bold_notes").checked) {
-          notes_pre  += "[b]";
-          notes_post  = "[/b]" + notes_post;
-        }
-        if (document.getElementById("checkbox_italic_notes").checked) {
-          notes_pre  += "[i]";
-          notes_post  = "[/i]" + notes_post;
-        }
+      write_cookies();
+    }
+  </script>
 
 
-        from = from.replace(/ *(.*) Sets \d* *$/gm, "\n" + exercise_pre + "$1" + exercise_post);
-        from = from.replace(/^Notes: *(.*)$/gm, notes_pre + "$1" + notes_post);
-        from = from.replace(/(?:Weight: *([\d\.]*) *... *)?Reps Completed: *(\d*) *Reps Intended: *(\d*) *RPE: *([\d\.]*) *$/gm, function (match, weight, reps, ireps, rpe) {
-          var out = "";
-          if (weight) {
-            out = weight + " ";
-          }
-          out += "x " + reps;       
-          if (ireps != "" && !document.getElementById("checkbox_ignore_intended_reps").checked) {
-            out += " / " + ireps;
-          }
-          if (rpe != "") {
-            out += " @ " + rpe;
-          }
-          return out;
-        });
-
-        // remove empty line at the beginning
-        if (from.charAt(0) == "\n") {
-          from = from.substr(1);
-        }
-        
-        document.getElementById("to").value = from;
-
-        fromHTML = from.replace(/\[(.)\]/g, "<$1>");
-        fromHTML = fromHTML.replace(/\[\/(.)\]/g, "</$1>");
-        fromHTML = fromHTML.replace(/\n/g, "<br>");
-        document.getElementById("preview").innerHTML = fromHTML;
-
-        write_cookies();
-      }
-    </script>
-
-
-    <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
-      <a class="navbar-brand" href="index.html">Exodus Tools</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link" href="index.html">Home</a>
-          <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
-          <a class="nav-item nav-link active" href="#">RTS to BB <span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link" href="regex.html">MuReRe</a>
-        </div>
+  <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
+    <a class="navbar-brand" href="index.html">Exodus Tools</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="index.html">Home</a>
+        <a class="nav-item nav-link" href="csvtobb.html">CSV to BB</a>
+        <a class="nav-item nav-link active" href="#">RTS to BB <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="regex.html">MuReRe</a>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <h1>RTS to BB</h1>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h1>RTS to BB</h1>
       </div>
-      <p>
-        <div class="card-group">
-          <div class="card">
-            <div class="card-header">
-              <a class="h4" data-toggle="collapse" href="#help" aria-expanded="false" aria-controls="help">
-                 Help
-             </a>
-            </div>
-            <div class="collapse" id="help">
-              <div class="card-body">
-                <ul>
-                  <li>Go to your <a href="http://www.reactivetrainingsystems.com/AppHome/Calendar" target="_blank">calendar</a></li>
-                  <li>Click on a workout</li>
-                  <li>Unfold all sets</li>
-                  <li>Copy all of it as shown in the picture below</li>
-                  <img width="400px" src="figures/rtscopy.png">
-                  <li>Paste it into the input</li>
-                </ul>
-              </div>
-            </div>
+    </div>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-header">
+          <a class="h4" data-toggle="collapse" href="#help" aria-expanded="false" aria-controls="help">Help</a>
+        </div>
+        <div class="collapse" id="help">
+          <div class="card-body">
+            <ul>
+              <li>Go to your <a href="http://www.reactivetrainingsystems.com/AppHome/Calendar" target="_blank">calendar</a></li>
+              <li>Click on a workout</li>
+              <li>Unfold all sets</li>
+              <li>Copy all of it as shown in the picture below</li>
+              <img width="400px" src="figures/rtscopy.png">
+              <li>Paste it into the input</li>
+            </ul>
           </div>
         </div>
-      </p>
-      <p>
-        <div class="card-group">
-          <div class="card">
-            <div class="card-header">
-              <a class="h4" data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="options">
-                 Options
-             </a>
-            </div>
-            <div class="collapse" id="options">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise">
-                        Underlined Exercise
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_bold_exercise" checked>
-                        Bold Exercise
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_italic_exercise">
-                        Italic Exercise
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-sm">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_underlined_notes">
-                        Underlined Notes
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_bold_notes">
-                        Bold Notes
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_italic_notes" checked>
-                        Italic Notes
-                      </label>
-                    </div>
-                  </div>
+      </div>
+    </div>
+    <br>
+    <div class="card-group">
+      <div class="card">
+        <div class="card-header">
+          <a class="h4" data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="options">Options</a>
+        </div>
+        <div class="collapse" id="options">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm">
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_underlined_exercise"> Underlined Exercise
                 </div>
-                <div class="row">
-                  <div class="col-sm">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps">
-                        Ignore intended reps
-                      </label>
-                    </div>
-                  </div>
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_bold_exercise" checked> Bold Exercise
+                </div>
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_italic_exercise"> Italic Exercise
+                </div>
+              </div>
+              <div class="col-sm">
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_underlined_notes"> Underlined Notes
+                </div>
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_bold_notes"> Bold Notes
+                </div>
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_italic_notes" checked> Italic Notes
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div class="checkbox">
+                  <input type="checkbox" onclick="replace()" id="checkbox_ignore_intended_reps"> Ignore intended reps
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </p>
-      <p>
-        <div class="row">
-          <div class="col-sm">
-            <h4>Input</h4>
-            <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
-          </div>
-          <div class="col-sm">
-            <h4>BB-Code</h4>
-            <textarea class="form-control" style="font-family:courier;" id="to" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
-          </div>
-          <div class="col-sm">
-            <h4>Preview</h4>
-            <div id="preview" style="border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
-          </div>
-        </div>
       </div>
-    </p>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <h4>Input</h4>
+        <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" onkeydown="replace()" id="from" rows="20"></textarea>
+      </div>
+      <div class="col-sm">
+        <h4>BB-Code</h4>
+        <textarea class="form-control" style="font-family:courier;" id="to" rows="20" onclick="this.focus();" onfocus="this.select();"></textarea>
+      </div>
+      <div class="col-sm">
+        <h4>Preview</h4>
+        <div id="preview" style="border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  </body>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+
 </html>
-

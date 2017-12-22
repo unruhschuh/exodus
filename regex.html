@@ -1,112 +1,162 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Regex</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <style>
-      #regex_input {
-        background-attachment: local;
-        background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%);
-        background-size: 100% 4rem;
-        width: 100%;
-        line-height: 2rem;
-        margin: 0 auto;
-        padding: 4px 8px;
+<head>
+  <title>Regex</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <style>
+    #regex_input {
+      background-attachment: local;
+      background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%);
+      background-size: 100% 4rem;
+      width: 100%;
+      line-height: 2rem;
+      margin: 0 auto;
+      padding: 4px 8px;
+    }
+  </style>
+</head>
+
+<body onload="load_me()">
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script>
+    function load_me() {
+      read_cookies();
+      replace();
+    }
+
+    function read_cookies() {
+      var regex_input = Cookies.get("regex_input");
+      var input = Cookies.get("input");
+      if (typeof regex_input != 'undefined') {
+        document.getElementById("regex_input").value = regex_input;
       }
-    </style>
-  </head>
-  <body onload="load_me()">
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script>
-
-      function load_me() {
-        read_cookies();
-        replace();
+      if (typeof input != 'undefined') {
+        document.getElementById("input").value = input;
       }
+    }
 
-      function read_cookies() {
-        var regex_input = Cookies.get("regex_input");
-        var input = Cookies.get("input");
-        if (typeof regex_input != 'undefined') {
-          document.getElementById("regex_input").value = regex_input;
-        }
-        if (typeof input != 'undefined') {
-          document.getElementById("input").value = input;
-        }
-      }
+    function write_cookies() {
+      var regex_input = document.getElementById("regex_input").value;
+      var input = document.getElementById("input").value;
+      Cookies.set("regex_input", regex_input, {
+        expires: 365
+      });
+      Cookies.set("input", input, {
+        expires: 365
+      });
+    }
 
-      function write_cookies() {
-        var regex_input = document.getElementById("regex_input").value;
-        var input = document.getElementById("input").value;
-        Cookies.set("regex_input", regex_input, { expires: 365 });
-        Cookies.set("input", input, { expires: 365 });
-      }
+    function replace() {
+      console.log("replace()");
+      var regex_input = document.getElementById("regex_input").value;
 
-      function replace() {
-        console.log("replace()");
-        var regex_input = document.getElementById("regex_input").value;
+      regex_input = regex_input.split(/\r\n|\r|\n/);
+      var num_regex = regex_input.length;
 
-        regex_input = regex_input.split(/\r\n|\r|\n/);
-        var num_regex = regex_input.length;
+      var regexps = [];
+      var flags = [];
+      var replace_strings = [];
 
-        var regexps = [];
-        var flags = [];
-        var replace_strings = [];
-
-        for (var i = 0; i < num_regex; i++) {
-          regex_input[i] = regex_input[i].replace(/^\s+/g, "");
-          if (regex_input[i][0] == "/") {
-            var slash1 = regex_input[i].indexOf("/", 1);
-            while (regex_input[i][slash1-1] == "\\") {
-              slash1 = regex_input[i].indexOf("/", slash1+1);
+      for (var i = 0; i < num_regex; i++) {
+        regex_input[i] = regex_input[i].replace(/^\s+/g, "");
+        if (regex_input[i][0] == "/") {
+          var slash1 = -1;
+          var slash2 = -1;
+          for (var j = 1; j < regex_input[i].length; j++) {
+            if (regex_input[i].charAt(j) === '/') {
+              // found the first slash
+              slash1 = j;
+              break;
             }
-            var slash2 = regex_input[i].indexOf("/", slash1+1);
-            if (slash1 != -1 && slash2 != -1) {
-              regexps.push(regex_input[i].substring(1, slash1));
-              flags.push(regex_input[i].substring(slash1+1, slash2));
-              replace_strings.push(regex_input[i].substring(slash2+1));
+            if (regex_input[i].charAt(j) === '\\') {
+              // the next character is escaped, so jump over it
+              j++;
             }
           }
+          for (var j = slash1 + 1; j < regex_input[i].length; j++) {
+            if (regex_input[i].charAt(j) === '/') {
+              // found the second slash
+              slash2 = j;
+              break;
+            }
+            if (regex_input[i].charAt(j) === '\\') {
+              // the next character is escaped, so jump over it
+              j++;
+            }
+          }
+          console.log('slash1: ' + slash1 + ', slash2: ' + slash2);
+          /*
+          var slash1 = regex_input[i].indexOf("/", 1);
+          while (regex_input[i][slash1 - 1] == "\\") {
+            slash1 = regex_input[i].indexOf("/", slash1 + 1);
+          }
+          var slash2 = regex_input[i].indexOf("/", slash1 + 1);
+          */
+          if (slash1 != -1 && slash2 != -1) {
+            regexps.push(regex_input[i].substring(1, slash1));
+            flags.push(regex_input[i].substring(slash1 + 1, slash2));
+            replace_strings.push(regex_input[i].substring(slash2 + 1));
+          }
         }
-        console.log(regexps);
-        console.log(flags);
-        console.log(replace_strings);
+      }
+      console.log(regexps);
+      console.log(flags);
+      console.log(replace_strings);
 
-        var num_regex = regexps.length;
+      var num_regex = regexps.length;
 
-        var input = document.getElementById("input").value;
+      var input = document.getElementById("input").value;
 
-        var log_text = "";
-        for (var i = 0; i < num_regex; i++) {
-          replace_strings[i] = replace_strings[i].replace(/\\n/g, "\n");
-          replace_strings[i] = replace_strings[i].replace(/\\t/g, "\t");
-          replace_strings[i] = replace_strings[i].replace(/\\r/g, "\r");
+      var log_text = "";
+      for (var i = 0; i < num_regex; i++) {
+        var replace_string_ok = true;
+        replace_strings[i] = replace_strings[i].replace(/\\(.)/g, function(match, p) {
+          switch (p) {
+            case "r":
+              return "\r";
+              break;
+            case "n":
+              return "\n";
+              break;
+            case "t":
+              return "\t";
+              break;
+            case "\\":
+              return "\\"
+              break;
+            default:
+              log_text += "Error in line " + (i + 1) + ": wrong escape using backslash in replacement string<br>";
+              replace_string_ok = false;
+          }
+        });
 
+        regexps[i] = regexps[i].replace(/\\\//g, "/");
+
+        if (replace_string_ok) {
           try {
             var regex = new RegExp(regexps[i], flags[i]);
             input = input.replace(regex, replace_strings[i]);
-          }
-          catch (err) {
-            log_text += "Error in line " + (i+1) + ": " + err.message + "<br>";
+          } catch (err) {
+            log_text += "Error in line " + (i + 1) + ": " + err.message + "<br>";
           }
         }
-        document.getElementById("log").innerHTML = log_text;
-        document.getElementById("output").value = input;
-        write_cookies();
       }
-    </script>
+      document.getElementById("log").innerHTML = log_text;
+      document.getElementById("output").value = input;
+      write_cookies();
+    }
+  </script>
 
 
   <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #179CE0;">
     <a class="navbar-brand" href="index.html">Exodus Tools</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="index.html">Home</a>
@@ -117,40 +167,41 @@
     </div>
   </nav>
 
-    <div class="container-fluid">
-      <h1>Multi-Regex-Replace</h1>
-      <div class="row">
-        <div class="col">
-          <h2>Regular Expression / Flags / Replacement String</h2>
-          <textarea wrap="off" class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="regex_input" rows="9"></textarea>
-        </div>
+  <div class="container-fluid">
+    <h1>Multi-Regex-Replace</h1>
+    <div class="row">
+      <div class="col">
+        <h2>Regular Expression / Flags / Replacement String</h2>
+        <textarea wrap="off" class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="regex_input" rows="9"></textarea>
       </div>
-      <div class="row">
-        <div class="col">
-          <h2>Log</h2>
-          <div id="log" style="color:red; border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <h2>Input</h2>
-          <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="input" rows="20"></textarea>
-        </div>
-        <div class="col-sm">
-          <h2>Output</h2>
-          <textarea class="form-control" style="font-family:courier;" id="output" rows="20" onclick"this.focus();" onfocus="this.select();"></textarea>
-        </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <h2>Log</h2>
+        <div id="log" style="color:red; border: 1px solid lightgray; border-radius:4px; padding: 10px;"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <h2>Input</h2>
+        <textarea class="form-control" style="font-family:courier;" onpaste="replace()" oninput="replace()" onchange="replace()" id="input" rows="20"></textarea>
+      </div>
+      <div class="col-sm">
+        <h2>Output</h2>
+        <textarea class="form-control" style="font-family:courier;" id="output" rows="20" onclick="this.focus();" onfocus="this.select();"></textarea>
+      </div>
+    </div>
+  </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  </body>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+
 </html>
-
